@@ -238,6 +238,10 @@
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Search Here" oninput="filterPlayers()" />
     </div>
+<div class="player-count" id="playerCount">
+      Loading players...
+    </div>
+<br />
     <div id="playerList" class="player-list"></div>
   </div>
   
@@ -254,6 +258,16 @@
     const defaultProfileImg = 'https://ui-avatars.com/api/?name=Player&size=200&background=e0e3e8&color=333';
     let playersData = [];
 
+    // Update player count display
+    function updatePlayerCount(count, isFiltered = false) {
+      const playerCountElement = document.getElementById('playerCount');
+      if (isFiltered) {
+        playerCountElement.innerHTML = `📊 Showing ${count} of ${playersData.length} players`;
+      } else {
+        playerCountElement.innerHTML = `👥 Total Players: ${count}`;
+      }
+    }
+
     // Fetch players from API and render
     async function fetchPlayers() {
       try {
@@ -268,9 +282,11 @@
           return aFormId - bFormId;
         });
         
+        updatePlayerCount(playersData.length);
         renderPlayers(playersData);
       } catch (e) {
         document.getElementById('playerList').innerHTML = '<div>Error loading players.</div>';
+        document.getElementById('playerCount').innerHTML = '❌ Error loading players';
       }
     }
 
@@ -314,6 +330,13 @@
         const bFormId = b.playerFormId || 0;
         return aFormId - bFormId;
       });
+      
+      // Update count based on search
+      if (val) {
+        updatePlayerCount(filteredPlayers.length, true);
+      } else {
+        updatePlayerCount(playersData.length);
+      }
       
       renderPlayers(filteredPlayers);
     }
