@@ -8,7 +8,8 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
-      background-color: #00000030;
+      background: linear-gradient(249deg, rgb(0 0 0 / 65%) 0%, #764ba2 100%);
+      min-height: 100vh;
       color: #333;
     }
     header {
@@ -17,7 +18,7 @@
       text-align: center;
       font-size: 1.25rem;
       font-weight: 600;
-      box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      box-shadow: 0 1px 8px rgba(0,0,0,0.15);
       margin-bottom: 8px;
     }
     .container {
@@ -29,67 +30,103 @@
     /* Logo styles */
     .logo-container {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
       margin: 20px 0;
       gap: 15px;
-    }
+      padding: 20px;
+     }
     .main-logo {
-      height: 80px;
-      width: 200px;
+      height: 99px;
+      width: 375px;
       object-fit: cover;
-      border-radius: 8px;
+      padding: 8px;
     }
     .sponsor-logo {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  filter: brightness(120%) contrast(110%) saturate(110%);
-  transition: filter 0.3s ease;
-}
+      width: 217px;
+      height: 140px;
+      object-fit: cover;
+      filter: brightness(110%) contrast(105%) saturate(105%);
+      transition: filter 0.3s ease;
+      padding: 8px;
+    }
+    .sponsor-logo:hover {
+      filter: brightness(120%) contrast(110%) saturate(110%);
+      transform: scale(1.02);
+    }
     
     .search-box {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .search-box input {
       width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #dfe3e8;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.3);
       font-size: 1rem;
       box-sizing: border-box;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
+    .search-box input:focus {
+      outline: none;
+      border-color: #5274c8;
+      box-shadow: 0 0 0 3px rgba(82,116,200,0.1);
+    }
+    
+    /* Player count styles */
+    .player-count {
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(10px);
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: #5274c8;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+    
     .player-list {
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
     .player-card {
-      background: #0000001c;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(15px);
       display: flex;
       align-items: center;
       padding: 16px;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      transition: box-shadow 0.2s;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      transition: all 0.3s ease;
       gap: 18px;
+      border: 1px solid rgba(255,255,255,0.3);
     }
     .player-card:hover {
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+      transform: translateY(-2px);
+      background: rgba(255,255,255,1);
     }
     .profile-img {
       width: 58px;
       height: 58px;
       border-radius: 50%;
       object-fit: cover;
-      background: #eee;
+      background: #f8f9fa;
       flex-shrink: 0;
       cursor: pointer;
-      border: 2px solid #eaecef;
-      transition: border-color 0.2s;
+      border: 3px solid rgba(255,255,255,0.8);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .profile-img:hover {
       border-color: #5274c8;
+      transform: scale(1.05);
     }
     .player-info {
       flex: 1;
@@ -101,6 +138,7 @@
       margin-bottom: 6px;
       line-height: 1.2;
       word-break: break-word;
+      color: #2c3e50;
     }
     .player-role, .player-village, .player-age, .player-dates {
       font-size: 0.97rem;
@@ -126,8 +164,9 @@
       z-index: 1050;
       left: 0; top: 0;
       width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.8);
       justify-content: center; align-items: center;
+      backdrop-filter: blur(5px);
     }
     .modal.active {
       display: flex;
@@ -137,7 +176,7 @@
       background: #fff;
       padding: 20px;
       border-radius: 18px;
-      box-shadow: 0 4px 36px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 36px rgba(0,0,0,0.25);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -155,6 +194,7 @@
       width: auto; height: auto;
       border-radius: 12px;
       object-fit: contain;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
     .close-btn {
       position: absolute;
@@ -164,28 +204,32 @@
       border: none;
       border-radius: 50%;
       font-size: 18px;
-      width: 30px; height: 30px;
+      width: 32px; height: 32px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      transition: all 0.2s;
       font-weight: bold;
+      box-shadow: 0 2px 8px rgba(244,67,54,0.3);
     }
     .close-btn:hover {
       background: #d32f2f;
+      transform: scale(1.1);
     }
     
     @media screen and (max-width: 480px) {
       .logo-container {
-        gap: 10px;
+        padding: 15px;
+        gap: 12px;
       }
       .main-logo {
-        height: 60px;
+        height: 99px;
+        width: 375px;
       }
       .sponsor-logo {
-        width: 150px;
-        height: 150px;
+        width: 217px;
+        height: 140px;
       }
       .player-card {
         flex-direction: column;
@@ -202,7 +246,7 @@
         padding: 10px 0;
       }
       .container {
-        padding: 0 4px;
+        padding: 0 8px;
       }
       .modal-content { 
         max-width: 95vw;
@@ -230,18 +274,19 @@
       
       <img class="sponsor-logo" 
            src="assets/eventlogo.png" 
-           alt="Sponsor Logo" 
-           onerror="this.src='https://ui-avatars.com/api/?name=SPONSOR&size=160&background=ff6b35&color=fff&bold=true'"
+           alt="Event Logo" 
+           onerror="this.src='https://ui-avatars.com/api/?name=EVENT&size=160&background=ff6b35&color=fff&bold=true'"
       />
     </div>
     
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="Search Here" oninput="filterPlayers()" />
     </div>
-<div class="player-count" id="playerCount">
+    
+    <div class="player-count" id="playerCount">
       Loading players...
     </div>
-<br />
+    
     <div id="playerList" class="player-list"></div>
   </div>
   
