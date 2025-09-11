@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Satyapur Premier League - All Players</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #f5f8fb;
+      color: #333;
+    }
+    header {
+      background-color: #fff;
+      padding: 16px 0;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+      margin-bottom: 8px;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 12px;
+    }
+    
+    /* Logo styles */
+    .logo-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .logo {
+      width: 332px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+
+    }
+    
+    .search-box {
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #dfe3e8;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .player-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .player-card {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      transition: box-shadow 0.2s;
+      gap: 18px;
+    }
+    .player-card:hover {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    .profile-img {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #eee;
+      flex-shrink: 0;
+      cursor: pointer;
+      border: 2px solid #eaecef;
+      transition: border-color 0.2s;
+    }
+    .profile-img:hover {
+      border-color: #5274c8;
+    }
+    .player-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .player-name {
+      font-size: 1.14rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+    .player-role, .player-village, .player-age, .player-dates {
+      font-size: 0.97rem;
+      margin-bottom: 2px;
+      color: #5274c8;
+      font-weight: 500;
+    }
+    .player-dates {
+      color: #16754d;
+      font-size: 0.93rem;
+      margin-bottom: 0;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.7);
+      justify-content: center; align-items: center;
+    }
+    .modal.active {
+      display: flex;
+    }
+    .modal-content {
+      position: relative;
+      background: #fff;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 4px 36px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeInModal 0.3s;
+      max-width: 90vw;
+      max-height: 85vh;
+    }
+    @keyframes fadeInModal {
+      from { transform: scale(0.9); opacity: 0;}
+      to   { transform: scale(1); opacity: 1;}
+    }
+    .modal-img {
+      max-width: 400px;
+      max-height: 70vh;
+      width: auto; height: auto;
+      border-radius: 12px;
+      object-fit: contain;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      background: #f44336;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      width: 30px; height: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      font-weight: bold;
+    }
+    .close-btn:hover {
+      background: #d32f2f;
+    }
+
+    @media screen and (max-width: 480px) {
+      .player-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 12px;
+      }
+      .profile-img {
+        width: 48px;
+        height: 48px;
+      }
+      .logo {
+        width: 332px;
+        height: 60px;
+      }
+      header {
+        font-size: 1.03rem;
+        padding: 10px 0;
+      }
+      .container {
+        padding: 0 4px;
+      }
+      .modal-content { 
+        max-width: 95vw;
+        padding: 15px;
+      }
+      .modal-img { 
+        max-width: 90vw; 
+        max-height: 60vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Satyapur Premier League - All Players
+  </header>
+  <div class="container">
+    <!-- Logo Section -->
+    <div class="logo-container">
+      <img class="logo" 
+           src="assets/rrc.png" 
+           alt="Tournament Logo" 
+           onerror="this.src='https://ui-avatars.com/api/?name=SPL&size=200&background=5274c8&color=fff&bold=true'"
+      />
+    </div>
+    
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search Here" oninput="filterPlayers()" />
+    </div>
+    <div id="playerList" class="player-list"></div>
+  </div>
+  
+  <!-- Modal for image popup -->
+  <div class="modal" id="imgModal" onclick="closeModalOnBackground(event)">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">×</button>
+      <img id="modalImg" class="modal-img" src="" alt="Player Profile" />
+    </div>
+  </div>
+
+  <script>
+    const apiUrl = 'https://sportsdecor.somee.com/api/Player/GetAllPlayersByTourId/117';
+    const defaultProfileImg = 'https://ui-avatars.com/api/?name=Player&size=200&background=e0e3e8&color=333';
+
+    let playersData = [];
+
+    // Fetch players from API and render
+    async function fetchPlayers() {
+      try {
+        const response = await fetch(apiUrl);
+        const json = await response.json();
+        playersData = json.data || [];
+        renderPlayers(playersData);
+      } catch (e) {
+        document.getElementById('playerList').innerHTML = '<div>Error loading players.</div>';
+      }
+    }
+
+    // Render player cards
+    function renderPlayers(players) {
+      const playerList = document.getElementById('playerList');
+      playerList.innerHTML = players.map((player, idx) => `
+        <div class="player-card">
+          <img class="profile-img"
+            src="${player.profileImage ? player.profileImage : defaultProfileImg}"
+            alt="${player.name || 'Player'}"
+            loading="lazy"
+            onclick="openModal('${player.profileImage ? player.profileImage : defaultProfileImg}')"
+          />
+          <div class="player-info">
+            <div class="player-name">${player.name || 'Unknown'}</div>
+            <div class="player-role">${player.role ? player.role : 'N/A'}</div>
+            <div class="player-village">🏠 ${player.village || '-'}</div>
+            <div class="player-age">🎂 ${player.age !== null && player.age !== undefined ? player.age + ' yrs' : '-'}</div>
+            <div class="player-dates">
+              📅 Available On: ${player.availableOnDates && player.availableOnDates.trim() ? player.availableOnDates : 'N/A'}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Filter players by search input
+    function filterPlayers() {
+      const val = document.getElementById('searchInput').value.trim().toLowerCase();
+      renderPlayers(playersData.filter(player =>
+        (player.name && player.name.toLowerCase().includes(val)) ||
+        (player.role && player.role.toLowerCase().includes(val)) ||
+        (player.village && player.village.toLowerCase().includes(val))
+      ));
+    }
+
+    // Open modal with image
+    function openModal(imageSrc) {
+      const modal = document.getElementById('imgModal');
+      const modalImg = document.getElementById('modalImg');
+      
+      modalImg.src = imageSrc;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden'; // Prevent background scroll
+    }
+
+    // Close modal
+    function closeModal() {
+      const modal = document.getElementById('imgModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto'; // Restore background scroll
+    }
+
+    // Close modal when clicking on background (not on modal content)
+    function closeModalOnBackground(event) {
+      if (event.target.id === 'imgModal') {
+        closeModal();
+      }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeModal();
+      }
+    });
+
+    // Initialize
+    fetchPlayers();
+  </script>
+</body>
+</html>
